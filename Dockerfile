@@ -4,6 +4,9 @@ FROM ubuntu:22.04
 ARG APP_ARCHIVE
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
+RUN pwd
+RUN ls
+RUN find "$(pwd)" -name "app.zip" -print
 RUN apt-get update && apt-get install -y \
 	cmake \
 	expect \
