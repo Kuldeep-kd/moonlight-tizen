@@ -1,7 +1,7 @@
 FROM ubuntu:22.04
 
-# Declare the build argument
-ARG PR_COMMIT_SHA
+# Declare the build argument for the app archive
+ARG APP_ARCHIVE
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
 RUN apt-get update && apt-get install -y \
@@ -54,8 +54,10 @@ WORKDIR emscripten-release-bundle/emsdk
 RUN ./emsdk activate latest-fastcomp
 WORKDIR ../.. 
 
+RUN unzip $APP_ARCHIVE
+
 # Build moonlight
-RUN git clone --recurse-submodules --depth 1 git@github.com:Kuldeep-kd/moonlight-tizen.git#${PR_COMMIT_SHA}
+# RUN git clone --recurse-submodules --depth 1 git@github.com:Kuldeep-kd/moonlight-tizen.git#${PR_COMMIT_SHA}
 # RUN git clone https://github.com/KyroFrCode/moonlight-chrome-tizen
 
 RUN cmake \
@@ -80,6 +82,8 @@ RUN echo \
 	'send -- "N\\r"\n' \
 	'expect eof\n' \
 | expect
+
+EXPOSE 80
 
 # Optional; remove unneed files
 RUN mv build/widget/MoonlightWasm.wgt .

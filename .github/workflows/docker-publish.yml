@@ -10,23 +10,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Show Branch SHA
-      run: echo ${{ github.event.pull_request.head.sha }}
-
-    - name: Checkout PR
+    - name: Checkout Repository
       uses: actions/checkout@v2
       with:
-        ref: ${{ github.event.pull_request.head.sha }}
+        ref: ${{ github.event.pull_request.head.sha }} # Checkout the PR branch commit
+
+    - name: Create Archive
+      run: |
+        mkdir -p app
+        mv * app/ || true
+        zip -r app.zip app
 
     - name: Build Docker Image
-      run: docker build -t moonlight-tizen --build-arg PR_COMMIT_SHA=${{ github.event.pull_request.head.sha }} .
+      run: docker build -t moonlight-tizen --build-arg APP_ARCHIVE=app.zip .
 
-    # - name: Run Docker Container
-    #   run: docker run --rm html-cmake-app
+    - name: Create and Copy Artifacts
+      run: |
+        mkdir -p artifacts
+        docker run --rm -v $(pwd)/artifacts:/build/widget moonlight-tizen
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v2
       with:
         name: built-artifacts
-        path: build/widget/  # Replace this with the actual path
+        path: artifacts  # Upload the artifacts directory
 
