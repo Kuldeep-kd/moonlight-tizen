@@ -13,6 +13,11 @@ jobs:
     - name: Show Branch SHA
       run: echo ${{ github.event.pull_request.head.sha }}
 
+    - name: Checkout PR
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+
     - name: Build Docker Image
       run: docker build -t moonlight-tizen --build-arg PR_COMMIT_SHA=${{ github.event.pull_request.head.sha }} .
 
