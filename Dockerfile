@@ -55,7 +55,7 @@ RUN ./emsdk activate latest-fastcomp
 WORKDIR ../.. 
 
 # Build moonlight
-RUN git clone --recurse-submodules --depth 1 https://github.com/Kuldeep-kd/moonlight-tizen.git#${PR_COMMIT_SHA}
+RUN git clone --recurse-submodules --depth 1 git@github.com:Kuldeep-kd/moonlight-tizen.git#${PR_COMMIT_SHA}
 # RUN git clone https://github.com/KyroFrCode/moonlight-chrome-tizen
 
 RUN cmake \
