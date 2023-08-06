@@ -22,7 +22,9 @@ jobs:
         zip -r app.zip app
 
     - name: Build Docker Image
-      run: docker build -t moonlight-tizen --build-arg APP_ARCHIVE=app.zip .
+      run: |
+        cd app
+        docker build -t moonlight-tizen --build-arg APP_ARCHIVE=app.zip .
 
     - name: Create and Copy Artifacts
       run: |
