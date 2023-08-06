@@ -10,13 +10,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout PR
-      uses: actions/checkout@v2
-      with:
-        ref: ${{ github.event.pull_request.head.sha }}
+    - name: Show Branch SHA
+      run: ${{ github.event.pull_request.head.sha }}
 
     - name: Build Docker Image
-      run: docker build -t moonlight-tizen .
+      run: docker build -t moonlight-tizen \
+          --build-arg PR_COMMIT_SHA=${{ github.event.pull_request.head.sha }} .
 
     # - name: Run Docker Container
     #   run: docker run --rm html-cmake-app
@@ -25,5 +24,5 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: built-artifacts
-        path: /build/artifacts  # Replace this with the actual path
+        path: build/widget/  # Replace this with the actual path
 

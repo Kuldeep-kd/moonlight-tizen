@@ -1,5 +1,7 @@
 FROM ubuntu:22.04
 
+# Declare the build argument
+ARG PR_COMMIT_SHA
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
 RUN apt-get update && apt-get install -y \
@@ -53,8 +55,8 @@ RUN ./emsdk activate latest-fastcomp
 WORKDIR ../.. 
 
 # Build moonlight
-#RUN git clone --recurse-submodules --depth 1 https://github.com/KyroFrCode/moonlight-chrome-tizen
-RUN git clone https://github.com/KyroFrCode/moonlight-chrome-tizen
+RUN git clone --recurse-submodules --depth 1 https://github.com/Kuldeep-kd/moonlight-tizen.git#${PR_COMMIT_SHA}
+# RUN git clone https://github.com/KyroFrCode/moonlight-chrome-tizen
 
 RUN cmake \
 	-DCMAKE_TOOLCHAIN_FILE=/home/moonlight/emscripten-release-bundle/emsdk/fastcomp/emscripten/cmake/Modules/Platform/Emscripten.cmake \
